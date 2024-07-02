@@ -79,7 +79,7 @@ import { ArrowUpRight } from "lucide-react";
 import { Badge } from "./ui/badge";
 
 // Fungsi untuk memeriksa apakah waktu `createdAt` kurang dari 12 jam dari waktu saat ini
-const isNew = (createdAt) => {
+const isNew = (createdAt: any) => {
   const twelveHours = 12 * 60 * 60 * 1000; // 12 jam dalam milidetik
   const now = new Date().getTime();
   return now - new Date(createdAt).getTime() < twelveHours;
