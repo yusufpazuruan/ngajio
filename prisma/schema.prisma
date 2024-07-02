@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id    Int    @id @default(autoincrement())
+  name  String
+  users User[] @relation("UserRole")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  fullname     String?
+  email        String?  @unique
+  avatar       String?
+  user_id      String?  @unique
+  color_scheme String?  @default("theme-orange")
+  role         Role     @relation("UserRole", fields: [roleId], references: [id], onDelete: Cascade)
+  roleId       Int      @default(4)
+  createdAt    DateTime @default(now()) @map(name: "created_at")
+  updatedAt    DateTime @updatedAt @map(name: "updated_at")
+
+  notesAuthored Note[]  @relation("Author")
+  notesAccepted Note[]  @relation("UserAccept")
+  studies       Study[]
+}
+
+model Study {
+  id        Int      @id @default(autoincrement())
+  name      String
+  link      String
+  material  String
+  datetime  DateTime
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  Note      Note[]
+}
+
+model Note {
+  id           Int       @id @default(autoincrement())
+  study        Study?    @relation(fields: [studyId], references: [id], onDelete: Cascade)
+  studyId      Int?
+  images       String[]
+  accepted     Boolean   @default(false)
+  accepted_by  User?      @relation("UserAccept", fields: [acceptedById], references: [id], onDelete: Cascade)
+  acceptedById Int? @default(1)
+  accepted_at  DateTime?
+  comments     String
+  createdAt    DateTime  @default(now()) @map(name: "created_at")
+  updatedAt    DateTime  @updatedAt @map(name: "updated_at")
+  author       User      @relation("Author", fields: [authorId], references: [id], onDelete: Cascade)
+  authorId     Int
+}
