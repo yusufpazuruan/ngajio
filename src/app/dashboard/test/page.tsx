@@ -28,26 +28,26 @@ export default function Page() {
     const formData = new FormData(event.currentTarget);
     const noteId = formData.get("noteId");
 
-    try {
-      const response = await fetch('/api/notes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ noteId }),
-      });
+    // try {
+    //   const response = await fetch('/api/notes', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({ noteId }),
+    //   });
 
-      const result = await response.json();
-      if (!response.ok) {
-        throw new Error(result.error || 'Failed to accept note');
-      }
+    //   const result = await response.json();
+    //   if (!response.ok) {
+    //     throw new Error(result.error || 'Failed to accept note');
+    //   }
 
-      console.log(result.message);
-      // Optionally, refresh notes or update state
-    } catch (error) {
-      console.error("Error accepting note:", error);
-      setError("Failed to accept note");
-    }
+    //   console.log(result.message);
+    //   // Optionally, refresh notes or update state
+    // } catch (error) {
+    //   console.error("Error accepting note:", error);
+    //   setError("Failed to accept note");
+    // }
   };
 
   return (
